@@ -1,0 +1,94 @@
+{
+  "name": "pasteplay",
+  "version": "1.0.0",
+  "description": "Windows-first app for clipboard and voice - select text anywhere and read it aloud",
+  "main": "src/main.js",
+  "author": "Antigravity",
+  "license": "ISC",
+  "build": {
+    "appId": "com.pasteplay.app",
+    "productName": "PastePlay",
+    "electronLanguages": [
+      "en-US"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "PastePlay"
+    },
+    "directories": {
+      "output": "dist/build",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/renderer/**/*",
+      "src/main.js",
+      "src/preload.js",
+      "assets/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "piper",
+        "to": "piper"
+      }
+    ],
+    "asar": true,
+    "asarUnpack": [
+      "**/node_modules/robotjs/**/*",
+      "**/piper/**/*"
+    ]
+  },
+  "scripts": {
+    "dev": "concurrently \"npm run dev:renderer\" \"npm run dev:electron\"",
+    "dev:renderer": "vite",
+    "dev:electron": "wait-on http://localhost:3000 && cross-env NODE_ENV=development electron .",
+    "build": "npm run build:renderer && npm run build:electron",
+    "build:renderer": "vite build",
+    "build:electron": "electron-builder --win --x64",
+    "rebuild:robotjs": "npm rebuild robotjs --update-binary",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "keywords": [
+    "clipboard",
+    "tts",
+    "text-to-speech",
+    "productivity",
+    "accessibility"
+  ],
+  "dependencies": {
+    "@supabase/supabase-js": "^2.96.0",
+    "electron-store": "^8.2.0",
+    "electron-updater": "^6.8.3",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.4",
+    "concurrently": "^9.2.1",
+    "cross-env": "^7.0.3",
+    "electron": "^40.4.1",
+    "electron-builder": "^26.7.0",
+    "png-to-ico": "^3.0.1",
+    "png2icons": "^2.0.1",
+    "sharp": "^0.34.5",
+    "vite": "^7.3.1",
+    "wait-on": "^9.0.4"
+  },
+  "optionalDependencies": {
+    "robotjs": "^0.6.0"
+  }
+}

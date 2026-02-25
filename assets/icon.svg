@@ -1,0 +1,7 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dark Background -->
+  <rect x="0" y="0" width="256" height="256" rx="64" fill="#000000"/>
+  
+  <!-- Zig-Zag Wave Shape (White, Center) -->
+  <path d="M40,112 L84,68 L128,112 L172,68 L216,112 L172,156 L128,112 L84,156 Z" fill="white"/>
+</svg>

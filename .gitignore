@@ -1,0 +1,44 @@
+# Ignore node modules
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Electron builder outputs
+*.exe
+*.dmg
+*.AppImage
+*.deb
+*.rpm
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.local
+
+# Electron store data (for development)
+# Remove this line if you want to preserve settings during dev
+# electron-store/
+
+# Piper TTS binaries & voice models (large binaries)
+piper/
+
+# Website downloads & builds
+website/ttslanding/project/public/downloads/
+website/ttslanding/project/dist/
