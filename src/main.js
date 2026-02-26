@@ -74,7 +74,7 @@ if (!gotTheLock) {
             height: 250,
             minWidth: 40,
             minHeight: 40,
-            show: false,
+            show: true, // Show by default on launch for visibility
             frame: false,
             alwaysOnTop: alwaysOnTop,
             resizable: true,
@@ -120,26 +120,18 @@ if (!gotTheLock) {
     }
 
     function createTray() {
-        const fs = require('fs');
-
         // Resolve icon path for both dev and packaged builds
-        let iconPath;
+        let iconPath = path.join(__dirname, '../assets/icon.png');
+
         if (app.isPackaged) {
-            // In packaged build, __dirname is inside the asar archive
-            // assets are included at the same relative path
-            iconPath = path.join(process.resourcesPath, 'app.asar', 'assets', 'icon.png');
-            if (!fs.existsSync(iconPath)) {
-                iconPath = path.join(process.resourcesPath, 'assets', 'icon.png');
+            // Packaged: check resources folder first, then fallback to __dirname
+            const resourcesIcon = path.join(process.resourcesPath, 'assets', 'icon.png');
+            if (fs.existsSync(resourcesIcon)) {
+                iconPath = resourcesIcon;
             }
-            if (!fs.existsSync(iconPath)) {
-                iconPath = path.join(__dirname, '../assets/icon.png');
-            }
-        } else {
-            iconPath = path.join(__dirname, '../assets/icon.png');
         }
 
         console.log('[Main] Tray icon path:', iconPath, 'exists:', fs.existsSync(iconPath));
-
         let icon = nativeImage.createFromPath(iconPath);
 
         // Resize for tray (16x16 or 32x32 is ideal for system tray)
