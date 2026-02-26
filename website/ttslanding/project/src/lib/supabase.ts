@@ -1,10 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+// Check for both VITE_ prefixed and standard variables (Netlify auto-connect sometimes omits VITE_)
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || import.meta.env.SUPABASE_URL || '';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.SUPABASE_ANON_KEY || '';
 
 if (!supabaseUrl || !supabaseAnonKey) {
-    console.error('⚠️ Supabase credentials missing! Website will be in "view-only" mode until environment variables (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY) are added to your host (Netlify).');
+    console.error('⚠️ Supabase credentials missing! Check Netlify environment variables.');
 }
 
 export const supabase = createClient(supabaseUrl || 'https://placeholder.supabase.co', supabaseAnonKey || 'placeholder');
