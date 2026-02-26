@@ -10,8 +10,9 @@ const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') as string, {
 });
 
 Deno.serve(async (req) => {
+    const siteUrl = Deno.env.get('SITE_URL') || 'https://pasteplay.app';
     const corsHeaders = {
-        'Access-Control-Allow-Origin': 'https://pasteplay.app',
+        'Access-Control-Allow-Origin': siteUrl,
         'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
     };
 

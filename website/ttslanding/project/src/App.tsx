@@ -62,15 +62,20 @@ function App() {
 
   const handleProAction = async (plan: 'monthly' | 'yearly') => {
     setSelectedPlan(plan);
-    const { data: { user } } = await supabase.auth.getUser();
 
-    if (user) {
-      const stripeLinks = {
-        monthly: 'https://buy.stripe.com/bJe28t3xo92feswco71Jm07',
-        yearly: 'https://buy.stripe.com/28E7sNc3Uemz4RWdsb1Jm08'
-      };
-      const baseUrl = stripeLinks[plan];
-      window.location.href = `${baseUrl}?prefilled_email=${encodeURIComponent(user.email || '')}&client_reference_id=${user.id}`;
+    if (isLoggedIn) {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const stripeLinks = {
+          monthly: 'https://buy.stripe.com/bJe28t3xo92feswco71Jm07',
+          yearly: 'https://buy.stripe.com/28E7sNc3Uemz4RWdsb1Jm08'
+        };
+        const baseUrl = stripeLinks[plan];
+        window.location.href = `${baseUrl}?prefilled_email=${encodeURIComponent(user.email || '')}&client_reference_id=${user.id}`;
+      } else {
+        // Fallback in case isLoggedIn was true but user session expired
+        setIsSignInOpen(true);
+      }
     } else {
       setIsSignInOpen(true);
     }
