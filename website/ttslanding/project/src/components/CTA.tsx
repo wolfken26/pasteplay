@@ -25,7 +25,7 @@ export function CTA({ onProAction }: CTAProps) {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
           <a
-            href="/downloads/PastePlay-v1-Setup.exe"
+            href="https://github.com/wolfken26/-pasteplay/releases/download/v1.0.0/PastePlay.Setup.1.0.0.exe"
             download="PastePlay-v1-Setup.exe"
             className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-lg font-bold text-lg hover:shadow-2xl hover:shadow-blue-500/50 transition-all inline-flex items-center justify-center gap-2"
           >

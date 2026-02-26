@@ -294,7 +294,7 @@ export function Account({ onSignOut }: AccountProps) {
                             </h2>
                             <div className="grid md:grid-cols-2 gap-4">
                                 <a
-                                    href="/downloads/PastePlay-v1-Setup.exe"
+                                    href="https://github.com/wolfken26/-pasteplay/releases/download/v1.0.0/PastePlay.Setup.1.0.0.exe"
                                     download="PastePlay-v1-Setup.exe"
                                     className="flex items-center justify-between p-4 bg-gray-950/50 hover:bg-gray-800 border border-gray-800 rounded-2xl transition-all"
                                 >
