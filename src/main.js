@@ -110,8 +110,11 @@ if (!gotTheLock) {
             mainWindow.loadURL('http://localhost:3000');
             mainWindow.webContents.openDevTools();
         } else {
-            mainWindow.loadFile(path.join(__dirname, '../dist/renderer/index.html'));
-            // Keep DevTools open in production for this debug build
+            // Load from unpacked location (asar can't serve file:// to sandboxed renderer)
+            const rendererPath = path.join(process.resourcesPath, 'app.asar.unpacked', 'dist', 'renderer', 'index.html');
+            console.log('[Main] Loading renderer from:', rendererPath, 'exists:', fs.existsSync(rendererPath));
+            mainWindow.loadFile(rendererPath);
+            // Keep DevTools open for this debug build
             mainWindow.webContents.openDevTools();
         }
 
