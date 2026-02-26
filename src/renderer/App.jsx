@@ -126,12 +126,16 @@ function WidgetViewer() {
 
     // Auth State Hook
     useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setUser(session?.user ?? null);
-            if (session?.user) {
-                getUserEntitlements(session.user.id).then(ent => setPlan(ent.plan));
-            }
-        });
+        if (supabase) {
+            supabase.auth.getSession().then(({ data: { session } }) => {
+                setUser(session?.user ?? null);
+                if (session?.user) {
+                    getUserEntitlements(session.user.id).then(ent => setPlan(ent.plan));
+                }
+            });
+        }
+
+        if (!supabase) return;
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             setUser(session?.user ?? null);
@@ -168,17 +172,12 @@ function WidgetViewer() {
             // We use a tiny timeout or just call speak with the text.
             setTimeout(() => speak(0, incomingText), 50);
         };
-        ipcRenderer.on('show-and-read', handleShowAndRead);
-
-        const handleShowError = (event, msg) => {
-            setToast({ message: msg, type: 'warning' });
-            setTimeout(() => setToast(null), 3000);
-        };
-        ipcRenderer.on('show-error', handleShowError);
+        const unShowAndRead = ppapi.on('show-and-read', handleShowAndRead);
+        const unShowError = ppapi.on('show-error', handleShowError);
 
         return () => {
-            ipcRenderer.removeListener('show-and-read', handleShowAndRead);
-            ipcRenderer.removeListener('show-error', handleShowError);
+            unShowAndRead();
+            unShowError();
         };
     }, [selectedVoice, speed, plan]); // Dependencies needed for speak() inside listener
 
@@ -684,6 +683,26 @@ function WidgetViewer() {
             </div>
         );
     };
+
+    if (!supabase) {
+        return (
+            <div style={{
+                height: '100vh', display: 'flex', flexDirection: 'column',
+                justifyContent: 'center', alignItems: 'center', background: '#000', color: '#fff',
+                fontFamily: PREMIUM_FONT, textAlign: 'center', padding: '20px'
+            }}>
+                <h1 style={{ color: '#60a5fa' }}>Configuration Missing</h1>
+                <p style={{ color: '#9ca3af', maxWidth: '400px' }}>
+                    The app is missing its Supabase connection details.
+                    Please ensure you have a <code>.env</code> file in your project root with
+                    <code>VITE_SUPABASE_URL</code> and <code>VITE_SUPABASE_ANON_KEY</code>.
+                </p>
+                <div style={{ marginTop: '20px', fontSize: '0.8em', color: '#666' }}>
+                    Check DevTools (opened automatically) for technical details.
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="widget-container" style={{

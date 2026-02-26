@@ -108,8 +108,11 @@ if (!gotTheLock) {
 
         if (isDev) {
             mainWindow.loadURL('http://localhost:3000');
+            mainWindow.webContents.openDevTools();
         } else {
             mainWindow.loadFile(path.join(__dirname, '../dist/renderer/index.html'));
+            // Keep DevTools open in production for this debug build
+            mainWindow.webContents.openDevTools();
         }
 
         // mainWindow.on('blur') listener removed to allow background playback.
@@ -124,9 +127,13 @@ if (!gotTheLock) {
         let iconPath = path.join(__dirname, '../assets/icon.png');
 
         if (app.isPackaged) {
-            // Packaged: check resources folder first, then fallback to __dirname
+            // Packaged: check unpacked resources folder first (more reliable for Windows tray)
+            const unpackedIcon = path.join(process.resourcesPath, 'app.asar.unpacked', 'assets', 'icon.png');
             const resourcesIcon = path.join(process.resourcesPath, 'assets', 'icon.png');
-            if (fs.existsSync(resourcesIcon)) {
+
+            if (fs.existsSync(unpackedIcon)) {
+                iconPath = unpackedIcon;
+            } else if (fs.existsSync(resourcesIcon)) {
                 iconPath = resourcesIcon;
             }
         }
